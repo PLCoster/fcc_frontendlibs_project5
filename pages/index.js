@@ -14,8 +14,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <NavBar />
-
       <div className={styles.container}>
         <main className={styles.main}>
           <h1 className={styles.title}>
