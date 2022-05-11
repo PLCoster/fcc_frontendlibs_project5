@@ -8,7 +8,6 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Pomo-do-it</title>
         <meta name="description" content="Pomodoro Timer App" />
         <link rel="icon" href="/favicon.ico" />
       </Head>

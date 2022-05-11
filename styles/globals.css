@@ -19,3 +19,7 @@ a {
 #__next {
   height: 100%;
 }
+
+hr {
+  margin: 8px 0;
+}

@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
 import Head from 'next/head';
-import { Container, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import styles from './styles/Timer.module.css';
+
+//import fingerSnap from '../public/audio/fingersnap.mp3';
 
 function Timer() {
   const [breakLengthMins, setBreakLengthMins] = useState(5);
@@ -134,60 +136,120 @@ function Timer() {
         )} ${timerPhase}  - Pomo-do-it`}</title>
       </Head>
 
-      <h1>Pomo-do-it</h1>
-      {/* BREAK LENGTH CONTROLS */}
-      <h4 id="break-label">
-        Break Length:
-        <Button
-          id="break-decrement"
-          onClick={() => {
-            console.log('decrementing break ');
-            handleTimerLengthChange(-1, 'Break');
-          }}
-        >
-          <i className="bi bi-arrow-down-circle-fill" />
-        </Button>
-        <span id="break-length">{breakLengthMins}</span>
-        <Button
-          id="break-increment"
-          onClick={() => {
-            console.log('incrementing break ');
-            handleTimerLengthChange(1, 'Break');
-          }}
-        >
-          <i className="bi bi-arrow-up-circle-fill" />
-        </Button>
-      </h4>
+      <Row className="justify-content-center">
+        <Col xs="auto">
+          <Container className={styles.timerContainer}>
+            <h1 className={'display-3'}>Pomo-do-it</h1>
 
-      {/* SESSION LENGTH CONTROLS */}
-      <h4 id="session-label">
-        Session Length:
-        <Button
-          id="session-decrement"
-          onClick={() => handleTimerLengthChange(-1, 'Session')}
-        >
-          <i className="bi bi-arrow-down-circle-fill" />
-        </Button>
-        <span id="session-length">{sessionLengthMins}</span>
-        <Button
-          id="session-increment"
-          onClick={() => handleTimerLengthChange(1, 'Session')}
-        >
-          <i className="bi bi-arrow-up-circle-fill" />
-        </Button>
-      </h4>
+            <hr />
 
-      {/* TIMER */}
-      <div className="timer-clock">
-        <h4 id="timer-label">{timerPhase}</h4>
-        <h2 id="time-left">{secondsFormatter(timerSecondsRemaining)}</h2>
-        <Button id="start_stop" onClick={handleTimerStopStart}>
-          {timerRunning ? 'Stop' : 'Start'}
-        </Button>
-        <Button id="reset" onClick={handleResetClick}>
-          Reset
-        </Button>
-      </div>
+            {/* PHASE LENGTH CONTROLS */}
+            <Row className="justify-content-center">
+              <Col xs="auto">
+                {/* BREAK LENGTH CONTROLS */}
+                <h5 id="break-label" className={styles.phaseLengthContainer}>
+                  Break Length:{'  '}
+                  <Button
+                    id="break-decrement"
+                    title={'Decrement Break Length'}
+                    onClick={() => {
+                      console.log('decrementing break ');
+                      handleTimerLengthChange(-1, 'Break');
+                    }}
+                    className={styles.phaseLengthButton}
+                  >
+                    <i className="bi bi-arrow-down-circle-fill" />
+                  </Button>
+                  <span id="break-length">{breakLengthMins}</span>
+                  <Button
+                    id="break-increment"
+                    title={'Increment Break Length'}
+                    onClick={() => {
+                      console.log('incrementing break ');
+                      handleTimerLengthChange(1, 'Break');
+                    }}
+                    className={styles.phaseLengthButton}
+                  >
+                    <i className="bi bi-arrow-up-circle-fill" />
+                  </Button>
+                </h5>
+              </Col>
+
+              <Col xs="auto">
+                {/* SESSION LENGTH CONTROLS */}
+                <h5 id="session-label" className={styles.phaseLengthContainer}>
+                  Session Length:{'  '}
+                  <Button
+                    id="session-decrement"
+                    title={'Decrement Session Length'}
+                    onClick={() => handleTimerLengthChange(-1, 'Session')}
+                    className={styles.phaseLengthButton}
+                  >
+                    <i className="bi bi-arrow-down-circle-fill" />
+                  </Button>
+                  <span id="session-length">{sessionLengthMins}</span>
+                  <Button
+                    id="session-increment"
+                    title={'Increment Session Length'}
+                    onClick={() => handleTimerLengthChange(1, 'Session')}
+                    className={styles.phaseLengthButton}
+                  >
+                    <i className="bi bi-arrow-up-circle-fill" />
+                  </Button>
+                </h5>
+              </Col>
+            </Row>
+
+            <hr />
+            {/* TIMER */}
+            <div className="timer-clock">
+              <h3 id="timer-label">
+                {`${timerPhase} : ${timerRunning ? 'Running' : 'Paused'}`}
+              </h3>
+              <h5>
+                {` ${
+                  timerPhase === 'Session' ? 'Time to focus!' : 'Time to relax!'
+                }`}
+              </h5>
+              <h2 id="time-left" className={'display-1'}>
+                {secondsFormatter(timerSecondsRemaining)}
+              </h2>
+
+              {/* TIMER CONTROLS */}
+              <Row className={'justify-content-center'}>
+                <Col xs="auto">
+                  <Button
+                    id="start_stop"
+                    title={timerRunning ? 'Pause Current Timer' : 'Start Timer'}
+                    onClick={handleTimerStopStart}
+                    className={`${styles.timerButton} ${
+                      timerPhase === 'Session'
+                        ? styles.onSessionFont
+                        : styles.onBreakFont
+                    }`}
+                  >
+                    {timerRunning ? 'Pause' : 'Start'}
+                  </Button>
+                </Col>
+                <Col xs="auto">
+                  <Button
+                    id="reset"
+                    title={'Reset Timer to Initial Settings'}
+                    onClick={handleResetClick}
+                    className={`${styles.timerButton} ${
+                      timerPhase === 'Session'
+                        ? styles.onSessionFont
+                        : styles.onBreakFont
+                    }`}
+                  >
+                    Reset
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          </Container>
+        </Col>
+      </Row>
     </Container>
   );
 }
