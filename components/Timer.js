@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Button from 'react-bootstrap/Button';
+import Head from 'next/head';
+import { Container, Button } from 'react-bootstrap';
+
+import styles from './styles/Timer.module.css';
 
 function Timer() {
   const [breakLengthMins, setBreakLengthMins] = useState(5);
@@ -111,9 +114,27 @@ function Timer() {
     }
   }, [swapPhase]);
 
+  // Format timer seconds to 'MM:SS' string for timer display
+  const secondsFormatter = (seconds) => {
+    return `${Math.floor(seconds / 60)
+      .toString()
+      .padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
+  };
+
   return (
-    <>
-      <h1>25 + 5 Clock</h1>
+    <Container
+      className={`${styles.appContainer} ${
+        timerPhase === 'Session' ? styles.onSession : styles.onBreak
+      }`}
+      fluid
+    >
+      <Head>
+        <title>{`${secondsFormatter(
+          timerSecondsRemaining
+        )} ${timerPhase}  - Pomo-do-it`}</title>
+      </Head>
+
+      <h1>Pomo-do-it</h1>
       {/* BREAK LENGTH CONTROLS */}
       <h4 id="break-label">
         Break Length:
@@ -159,13 +180,7 @@ function Timer() {
       {/* TIMER */}
       <div className="timer-clock">
         <h4 id="timer-label">{timerPhase}</h4>
-        <h2 id="time-left">
-          {`${Math.floor(timerSecondsRemaining / 60)
-            .toString()
-            .padStart(2, '0')}:${(timerSecondsRemaining % 60)
-            .toString()
-            .padStart(2, '0')}`}
-        </h2>
+        <h2 id="time-left">{secondsFormatter(timerSecondsRemaining)}</h2>
         <Button id="start_stop" onClick={handleTimerStopStart}>
           {timerRunning ? 'Stop' : 'Start'}
         </Button>
@@ -173,7 +188,7 @@ function Timer() {
           Reset
         </Button>
       </div>
-    </>
+    </Container>
   );
 }
 

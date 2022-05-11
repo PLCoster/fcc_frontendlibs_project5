@@ -1,0 +1,12 @@
+.appContainer {
+  min-height: calc(100% - 56px);
+  color: white;
+}
+
+.onSession {
+  background-color: #d95550;
+}
+
+.onBreak {
+  background-color: #457ca3;
+}
