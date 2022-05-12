@@ -25,11 +25,17 @@ function Timer() {
   const handleResetClick = () => {
     setBreakLengthMins(5);
     setSessionLengthMins(25);
-    setTimerRunning(false);
     setTimerSecondsRemaining(1500);
     timerSecondsRemainingRef.current = 1500;
+
+    clearTimeout(currTimeoutID);
+    setTimerRunning(false);
+
     setTimerPhase('Session');
     setSwapPhase(false);
+
+    alarmAudioRef.current.pause();
+    alarmAudioRef.current.currentTime = 0;
   };
 
   // Handler to control updates to session and break length
@@ -102,6 +108,9 @@ function Timer() {
   // Effect to handle swapping phase from e.g. Session -> Break when timer reaches 0
   useEffect(() => {
     if (swapPhase) {
+      // Play Alarm Audio Clip
+      playAudio(alarmAudioRef);
+
       // Cancel current timeout
       clearTimeout(currTimeoutID);
 
@@ -281,7 +290,17 @@ function Timer() {
         </Col>
       </Row>
 
-      <audio ref={buttonAudioRef} src={'/audio/fingersnap.mp3'}></audio>
+      {/* SOUND EFFECTS */}
+      <audio
+        id="click"
+        ref={buttonAudioRef}
+        src={'/audio/fingersnap.mp3'}
+      ></audio>
+      <audio
+        id="beep"
+        ref={alarmAudioRef}
+        src={'/audio/watch_alarm.mp3'}
+      ></audio>
     </Container>
   );
 }
