@@ -5,8 +5,6 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 
 import styles from './styles/Timer.module.css';
 
-//import fingerSnap from '../public/audio/fingersnap.mp3';
-
 function Timer() {
   const [breakLengthMins, setBreakLengthMins] = useState(5);
   const [sessionLengthMins, setSessionLengthMins] = useState(25);
@@ -18,6 +16,10 @@ function Timer() {
 
   const [timerPhase, setTimerPhase] = useState('Session');
   const [swapPhase, setSwapPhase] = useState(false);
+
+  // Refs for audio elements
+  const buttonAudioRef = useRef();
+  const alarmAudioRef = useRef();
 
   // Handler to reset timer to initial state when Reset button is clicked
   const handleResetClick = () => {
@@ -123,6 +125,13 @@ function Timer() {
       .padStart(2, '0')}:${(seconds % 60).toString().padStart(2, '0')}`;
   };
 
+  // Function to play the given audio element from the start
+  const playAudio = (audioRef) => {
+    // Reset the Audio Clip if playing then play it:
+    audioRef.current.currentTime = 0;
+    audioRef.current.play();
+  };
+
   return (
     <Container
       className={`${styles.appContainer} ${
@@ -152,9 +161,12 @@ function Timer() {
                   <Button
                     id="break-decrement"
                     title={'Decrement Break Length'}
-                    onClick={() => {
+                    onClick={(e) => {
                       console.log('decrementing break ');
                       handleTimerLengthChange(-1, 'Break');
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
                     }}
                     className={styles.phaseLengthButton}
                   >
@@ -167,6 +179,9 @@ function Timer() {
                     onClick={() => {
                       console.log('incrementing break ');
                       handleTimerLengthChange(1, 'Break');
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
                     }}
                     className={styles.phaseLengthButton}
                   >
@@ -183,6 +198,9 @@ function Timer() {
                     id="session-decrement"
                     title={'Decrement Session Length'}
                     onClick={() => handleTimerLengthChange(-1, 'Session')}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
+                    }}
                     className={styles.phaseLengthButton}
                   >
                     <i className="bi bi-arrow-down-circle-fill" />
@@ -192,6 +210,9 @@ function Timer() {
                     id="session-increment"
                     title={'Increment Session Length'}
                     onClick={() => handleTimerLengthChange(1, 'Session')}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
+                    }}
                     className={styles.phaseLengthButton}
                   >
                     <i className="bi bi-arrow-up-circle-fill" />
@@ -221,7 +242,13 @@ function Timer() {
                   <Button
                     id="start_stop"
                     title={timerRunning ? 'Pause Current Timer' : 'Start Timer'}
-                    onClick={handleTimerStopStart}
+                    onClick={() => {
+                      handleTimerStopStart();
+                      playAudio(buttonAudioRef);
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
+                    }}
                     className={`${styles.timerButton} ${
                       timerPhase === 'Session'
                         ? styles.onSessionFont
@@ -236,6 +263,9 @@ function Timer() {
                     id="reset"
                     title={'Reset Timer to Initial Settings'}
                     onClick={handleResetClick}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
+                    }}
                     className={`${styles.timerButton} ${
                       timerPhase === 'Session'
                         ? styles.onSessionFont
@@ -250,6 +280,8 @@ function Timer() {
           </Container>
         </Col>
       </Row>
+
+      <audio ref={buttonAudioRef} src={'/audio/fingersnap.mp3'}></audio>
     </Container>
   );
 }

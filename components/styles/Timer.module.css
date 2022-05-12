@@ -15,11 +15,15 @@
   background-color: #457ca3;
 }
 
-.onSessionFont {
+.onSessionFont,
+.onSessionFont:hover,
+.onSessionFont:focus {
   color: #d95550;
 }
 
-.onBreakFont {
+.onBreakFont,
+.onBreakFont:hover,
+.onBreakFont:focus {
   color: #457ca3;
 }
 
@@ -45,8 +49,19 @@
   border: none;
 }
 
-.phaseLengthButton:hover {
+.phaseLengthButton:hover,
+.phaseLengthButton:focus {
+  /* Having outline and box-shadow set to none on focus may hinder accessibility */
+  outline: none;
+  box-shadow: none;
   background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+}
+
+.phaseLengthButton:active:focus {
+  outline: none;
+  box-shadow: none;
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
 /* === TIMER AND TIMER CONTROL STYLES === */
@@ -55,4 +70,20 @@
   font-weight: 600;
   background-color: white;
   border-color: white;
+}
+
+.timerButton:hover,
+.timerButton:focus {
+  /* Having outline and box-shadow set to none on focus may hinder accessibility */
+  outline: none;
+  box-shadow: none;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+}
+
+.timerButton:active:focus {
+  outline: none;
+  box-shadow: none;
+  background-color: rgba(255, 255, 255, 0.95);
+  border: none;
 }
