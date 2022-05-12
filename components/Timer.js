@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from 'react';
 import Head from 'next/head';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
+import HistoryDisplay from './HistoryDisplay';
+
 import styles from './styles/Timer.module.css';
 
 function Timer() {
@@ -21,12 +23,18 @@ function Timer() {
   const buttonAudioRef = useRef();
   const alarmAudioRef = useRef();
 
+  const currTimeElapsedRef = useRef(0);
+  const currPhaseStartRef = useRef();
+  const [phaseHistory, setphaseHistory] = useState([]);
+
   // Handler to reset timer to initial state when Reset button is clicked
   const handleResetClick = () => {
     setBreakLengthMins(5);
     setSessionLengthMins(25);
     setTimerSecondsRemaining(1500);
     timerSecondsRemainingRef.current = 1500;
+    currTimeElapsedRef.current = 0;
+    currPhaseStartRef.current = null;
 
     clearTimeout(currTimeoutID);
     setTimerRunning(false);
@@ -82,12 +90,14 @@ function Timer() {
   // More accurate timekeeping than setInterval or repeated 1000ms setTimeouts
   const handleTimerStart = () => {
     console.log('Setting up new timer!');
+    currPhaseStartRef.current = Date.now();
     let nextTickTime = Date.now() + 1000;
     let timeoutID = null;
 
     const timeoutFunction = () => {
       // Decrement Seconds Remaining Ref, use this to set the Seconds Remaining State
       timerSecondsRemainingRef.current -= 1;
+      currTimeElapsedRef.current += 1;
 
       // Continue countdown on timer until it hits 0:
       if (timerSecondsRemainingRef.current >= 0) {
@@ -114,6 +124,18 @@ function Timer() {
       // Cancel current timeout
       clearTimeout(currTimeoutID);
 
+      // Update Session History
+      // Note: currTimeElapsed overcounts by 1 second
+      setphaseHistory([
+        ...phaseHistory,
+        [
+          timerPhase,
+          currTimeElapsedRef.current - 1,
+          currPhaseStartRef.current,
+          Date.now(),
+        ],
+      ]);
+
       // Swap Timer Phase
       const newPhase = timerPhase === 'Session' ? 'Break' : 'Session';
       setTimerPhase(newPhase);
@@ -121,6 +143,7 @@ function Timer() {
       // Start new timer
       timerSecondsRemainingRef.current =
         (newPhase === 'Session' ? sessionLengthMins : breakLengthMins) * 60;
+      currTimeElapsedRef.current = 0;
       setTimerSecondsRemaining(timerSecondsRemainingRef.current);
       handleTimerStart();
       setSwapPhase(false);
@@ -164,6 +187,36 @@ function Timer() {
             {/* PHASE LENGTH CONTROLS */}
             <Row className="justify-content-center">
               <Col xs="auto">
+                {/* SESSION LENGTH CONTROLS */}
+                <h5 id="session-label" className={styles.phaseLengthContainer}>
+                  Session Length:{'  '}
+                  <Button
+                    id="session-decrement"
+                    title={'Decrement Session Length'}
+                    onClick={() => handleTimerLengthChange(-1, 'Session')}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
+                    }}
+                    className={styles.phaseLengthButton}
+                  >
+                    <i className="bi bi-arrow-down-circle-fill" />
+                  </Button>
+                  <span id="session-length">{sessionLengthMins}</span>
+                  <Button
+                    id="session-increment"
+                    title={'Increment Session Length'}
+                    onClick={() => handleTimerLengthChange(1, 'Session')}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
+                    }}
+                    className={styles.phaseLengthButton}
+                  >
+                    <i className="bi bi-arrow-up-circle-fill" />
+                  </Button>
+                </h5>
+              </Col>
+
+              <Col xs="auto">
                 {/* BREAK LENGTH CONTROLS */}
                 <h5 id="break-label" className={styles.phaseLengthContainer}>
                   Break Length:{'  '}
@@ -189,36 +242,6 @@ function Timer() {
                       console.log('incrementing break ');
                       handleTimerLengthChange(1, 'Break');
                     }}
-                    onMouseLeave={(e) => {
-                      e.target.blur();
-                    }}
-                    className={styles.phaseLengthButton}
-                  >
-                    <i className="bi bi-arrow-up-circle-fill" />
-                  </Button>
-                </h5>
-              </Col>
-
-              <Col xs="auto">
-                {/* SESSION LENGTH CONTROLS */}
-                <h5 id="session-label" className={styles.phaseLengthContainer}>
-                  Session Length:{'  '}
-                  <Button
-                    id="session-decrement"
-                    title={'Decrement Session Length'}
-                    onClick={() => handleTimerLengthChange(-1, 'Session')}
-                    onMouseLeave={(e) => {
-                      e.target.blur();
-                    }}
-                    className={styles.phaseLengthButton}
-                  >
-                    <i className="bi bi-arrow-down-circle-fill" />
-                  </Button>
-                  <span id="session-length">{sessionLengthMins}</span>
-                  <Button
-                    id="session-increment"
-                    title={'Increment Session Length'}
-                    onClick={() => handleTimerLengthChange(1, 'Session')}
                     onMouseLeave={(e) => {
                       e.target.blur();
                     }}
@@ -289,6 +312,8 @@ function Timer() {
           </Container>
         </Col>
       </Row>
+
+      <HistoryDisplay history={phaseHistory} />
 
       {/* SOUND EFFECTS */}
       <audio
