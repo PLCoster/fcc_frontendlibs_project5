@@ -1,4 +1,25 @@
 /* === HISTORY DISPLAY CONTAINER STYLES === */
 
-.historyDisplayContainer {
+.detailedHistoryContainer {
+  max-height: 50vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.historyItem {
+  width: 95%;
+  background-color: rgba(256, 256, 256, 0.9);
+  border-radius: 5px;
+}
+
+.historyItemTitle {
+  height: 100%;
+}
+
+.historyItem h6 {
+  font-weight: 600;
+}
+
+.historyItem p {
+  font-weight: 600;
 }
