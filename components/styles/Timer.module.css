@@ -53,6 +53,16 @@
   background-color: rgba(255, 255, 255, 0.3);
 }
 
+.onSession .autoSwitch:checked {
+  border-color: #fff;
+  background-color: #d95550;
+}
+
+.onBreak .autoSwitch:checked {
+  border-color: #fff;
+  background-color: #457ca3;
+}
+
 /* === TIMER AND TIMER CONTROL STYLES === */
 
 .timerClockContainer {

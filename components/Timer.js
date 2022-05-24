@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, ToggleButton } from 'react-bootstrap';
 
 import HeadUpdater from './HeadUpdater';
 import HistoryDisplay from './HistoryDisplay';
@@ -19,6 +19,7 @@ function Timer() {
 
   const [timerPhase, setTimerPhase] = useState('Session');
   const [swapPhase, setSwapPhase] = useState(false);
+  const [autoStartNewPhase, setAutoStartNewPhase] = useState(true);
 
   // Refs for audio elements
   const buttonAudioRef = useRef();
@@ -129,35 +130,45 @@ function Timer() {
   // Effect to handle swapping phase from e.g. Session -> Break when timer reaches 0
   useEffect(() => {
     if (swapPhase) {
-      // Play Alarm Audio Clip
-      playAudio(alarmAudioRef);
+      // Play Alarm Audio Clip if timer was running when phase ends
+      if (timerRunning) {
+        playAudio(alarmAudioRef);
+      }
 
       // Cancel current timeout
       clearTimeout(currTimeoutID);
 
-      // Update Session History
-      // Note: currTimeElapsed overcounts by 1 second
-      setphaseHistory([
-        ...phaseHistory,
-        [
-          timerPhase,
-          currTimeElapsedRef.current - 1,
-          currPhaseStartRef.current,
-          Date.now(),
-        ],
-      ]);
+      // Update Session History if timer had been started:
+      if (currPhaseStartRef.current) {
+        // Note: currTimeElapsed overcounts by 1 second
+        setphaseHistory([
+          ...phaseHistory,
+          [
+            timerPhase,
+            currTimeElapsedRef.current - 1,
+            currPhaseStartRef.current,
+            Date.now(),
+          ],
+        ]);
+      }
 
       // Swap Timer Phase
       const newPhase = timerPhase === 'Session' ? 'Break' : 'Session';
       setTimerPhase(newPhase);
 
-      // Start new timer
       timerSecondsRemainingRef.current =
         (newPhase === 'Session' ? sessionLengthMins : breakLengthMins) * 60;
       currTimeElapsedRef.current = 0;
       currPhaseStartRef.current = null;
       setTimerSecondsRemaining(timerSecondsRemainingRef.current);
-      handleTimerStart();
+
+      // Start new timer if it was previously running else wait:
+      if (timerRunning && autoStartNewPhase) {
+        handleTimerStart();
+      } else {
+        setTimerRunning(false);
+      }
+
       setSwapPhase(false);
     }
   }, [swapPhase]);
@@ -192,7 +203,7 @@ function Timer() {
       <Row className="justify-content-center">
         <Col xs="auto">
           <Container className={styles.timerContainer}>
-            <h1 className={'display-3'}>Pomo-do-it</h1>
+            <h1 className={'display-6'}>Pomo-do-it</h1>
 
             <hr />
 
@@ -265,6 +276,26 @@ function Timer() {
               </Col>
             </Row>
 
+            {/* AUTOSTART NEXT PHASE SWITCH */}
+            <div className="d-flex justify-content-center">
+              <div className="form-check form-switch">
+                <input
+                  id="auto-start-switch"
+                  className={`${styles.autoSwitch} form-check-input`}
+                  title="Toggle whether or not to start next phase automatically"
+                  type="checkbox"
+                  checked={autoStartNewPhase}
+                  onChange={() => setAutoStartNewPhase(!autoStartNewPhase)}
+                  onMouseLeave={(e) => {
+                    e.target.blur();
+                  }}
+                />
+                <label for="auto-start-switch">
+                  Auto-Start next phase when current phase ends
+                </label>
+              </div>
+            </div>
+
             <hr />
             {/* TIMER */}
             <div className={styles.timerClockContainer}>
@@ -302,6 +333,30 @@ function Timer() {
                     {timerRunning ? 'Pause' : 'Start'}
                   </Button>
                 </Col>
+
+                <Col xs="auto">
+                  <Button
+                    id="skip_phase"
+                    className={`${buttonStyles.timerButton} ${
+                      timerPhase === 'Session'
+                        ? buttonStyles.onSessionFont
+                        : buttonStyles.onBreakFont
+                    }`}
+                    title={
+                      timerPhase === 'Session' ? 'Skip to Break' : 'Skip Break'
+                    }
+                    onClick={() => {
+                      console.log('Skipping current phase');
+                      setSwapPhase(true);
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.blur();
+                    }}
+                  >
+                    {timerPhase === 'Session' ? 'Skip to Break' : 'Skip Break'}
+                  </Button>
+                </Col>
+
                 <Col xs="auto">
                   <Button
                     id="reset"
