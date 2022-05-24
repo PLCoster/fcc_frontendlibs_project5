@@ -6,6 +6,7 @@ import HeadUpdater from './HeadUpdater';
 import HistoryDisplay from './HistoryDisplay';
 
 import styles from './styles/Timer.module.css';
+import buttonStyles from './styles/TimerButtons.module.css';
 
 function Timer() {
   const [breakLengthMins, setBreakLengthMins] = useState(5);
@@ -23,6 +24,7 @@ function Timer() {
   const buttonAudioRef = useRef();
   const alarmAudioRef = useRef();
 
+  // History-Related State
   const currTimeElapsedRef = useRef(0);
   const currPhaseStartRef = useRef();
   const [phaseHistory, setphaseHistory] = useState([]);
@@ -44,6 +46,11 @@ function Timer() {
 
     alarmAudioRef.current.pause();
     alarmAudioRef.current.currentTime = 0;
+  };
+
+  // Handler to clear all history data held
+  const handleClearHistoryClick = () => {
+    setphaseHistory([]);
   };
 
   // Handler to control updates to session and break length
@@ -222,6 +229,7 @@ function Timer() {
                   Break Length:{'  '}
                   <Button
                     id="break-decrement"
+                    className={styles.phaseLengthButton}
                     title={'Decrement Break Length'}
                     onClick={(e) => {
                       console.log('decrementing break ');
@@ -230,13 +238,13 @@ function Timer() {
                     onMouseLeave={(e) => {
                       e.target.blur();
                     }}
-                    className={styles.phaseLengthButton}
                   >
                     <i className="bi bi-arrow-down-circle-fill" />
                   </Button>
                   <span id="break-length">{breakLengthMins}</span>
                   <Button
                     id="break-increment"
+                    className={styles.phaseLengthButton}
                     title={'Increment Break Length'}
                     onClick={() => {
                       console.log('incrementing break ');
@@ -245,7 +253,6 @@ function Timer() {
                     onMouseLeave={(e) => {
                       e.target.blur();
                     }}
-                    className={styles.phaseLengthButton}
                   >
                     <i className="bi bi-arrow-up-circle-fill" />
                   </Button>
@@ -255,7 +262,7 @@ function Timer() {
 
             <hr />
             {/* TIMER */}
-            <div className="timer-clock">
+            <div className={styles.timerClockContainer}>
               <h3 id="timer-label">
                 {`${timerPhase} : ${timerRunning ? 'Running' : 'Paused'}`}
               </h3>
@@ -273,6 +280,11 @@ function Timer() {
                 <Col xs="auto">
                   <Button
                     id="start_stop"
+                    className={`${buttonStyles.timerButton} ${
+                      timerPhase === 'Session'
+                        ? buttonStyles.onSessionFont
+                        : buttonStyles.onBreakFont
+                    }`}
                     title={timerRunning ? 'Pause Current Timer' : 'Start Timer'}
                     onClick={() => {
                       handleTimerStopStart();
@@ -281,11 +293,6 @@ function Timer() {
                     onMouseLeave={(e) => {
                       e.target.blur();
                     }}
-                    className={`${styles.timerButton} ${
-                      timerPhase === 'Session'
-                        ? styles.onSessionFont
-                        : styles.onBreakFont
-                    }`}
                   >
                     {timerRunning ? 'Pause' : 'Start'}
                   </Button>
@@ -293,27 +300,33 @@ function Timer() {
                 <Col xs="auto">
                   <Button
                     id="reset"
+                    className={`${buttonStyles.timerButton} ${
+                      timerPhase === 'Session'
+                        ? buttonStyles.onSessionFont
+                        : buttonStyles.onBreakFont
+                    }`}
                     title={'Reset Timer to Initial Settings'}
                     onClick={handleResetClick}
                     onMouseLeave={(e) => {
                       e.target.blur();
                     }}
-                    className={`${styles.timerButton} ${
-                      timerPhase === 'Session'
-                        ? styles.onSessionFont
-                        : styles.onBreakFont
-                    }`}
                   >
                     Reset
                   </Button>
                 </Col>
               </Row>
             </div>
+
+            <hr />
+
+            <HistoryDisplay
+              timerPhase={timerPhase}
+              history={phaseHistory}
+              handleClearHistoryClick={handleClearHistoryClick}
+            />
           </Container>
         </Col>
       </Row>
-
-      <HistoryDisplay history={phaseHistory} />
 
       {/* SOUND EFFECTS */}
       <audio
