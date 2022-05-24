@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 
-import Head from 'next/head';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 
+import HeadUpdater from './HeadUpdater';
 import HistoryDisplay from './HistoryDisplay';
 
 import styles from './styles/Timer.module.css';
@@ -171,11 +171,11 @@ function Timer() {
       }`}
       fluid
     >
-      <Head>
-        <title>{`${secondsFormatter(
-          timerSecondsRemaining
-        )} ${timerPhase}  - Pomo-do-it`}</title>
-      </Head>
+      <HeadUpdater
+        timerSeconds={secondsFormatter(timerSecondsRemaining)}
+        timerPhase={timerPhase}
+        timerRunning={timerRunning}
+      />
 
       <Row className="justify-content-center">
         <Col xs="auto">
