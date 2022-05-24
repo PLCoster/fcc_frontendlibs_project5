@@ -26,7 +26,7 @@ function Timer() {
 
   // History-Related State
   const currTimeElapsedRef = useRef(0);
-  const currPhaseStartRef = useRef();
+  const currPhaseStartRef = useRef(null);
   const [phaseHistory, setphaseHistory] = useState([]);
 
   // Handler to reset timer to initial state when Reset button is clicked
@@ -97,7 +97,11 @@ function Timer() {
   // More accurate timekeeping than setInterval or repeated 1000ms setTimeouts
   const handleTimerStart = () => {
     console.log('Setting up new timer!');
-    currPhaseStartRef.current = Date.now();
+    // If no start time for the current timer, create one:
+    if (!currPhaseStartRef.current) {
+      currPhaseStartRef.current = Date.now();
+    }
+
     let nextTickTime = Date.now() + 1000;
     let timeoutID = null;
 
@@ -151,6 +155,7 @@ function Timer() {
       timerSecondsRemainingRef.current =
         (newPhase === 'Session' ? sessionLengthMins : breakLengthMins) * 60;
       currTimeElapsedRef.current = 0;
+      currPhaseStartRef.current = null;
       setTimerSecondsRemaining(timerSecondsRemainingRef.current);
       handleTimerStart();
       setSwapPhase(false);
