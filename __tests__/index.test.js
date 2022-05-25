@@ -368,7 +368,7 @@ describe('App', () => {
     expect(sessionLengthElement.innerHTML).toBe('27');
   });
 
-  it('meets requirements of User Story 16 : session or break lengths cannot be <= 0', async () => {
+  it('meets requirements of User Story 16 : session or break lengths cannot be <= 0', () => {
     render(<App />);
 
     const sessionDecrementButton = screen.getByTitle(
@@ -391,15 +391,15 @@ describe('App', () => {
 
     // Click the decrement buttons 100 times
     for (let i = 0; i < 100; i += 1) {
-      await sessionDecrementButton.click();
-      await breakDecrementButton.click();
+      act(() => sessionDecrementButton.click());
+      act(() => breakDecrementButton.click());
     }
 
     expect(sessionLengthElement.innerHTML).toBe('1');
     expect(breakLengthElement.innerHTML).toBe('1');
   });
 
-  it('meets requirements of User Story 17 : session or break lengths cannot be > 60', async () => {
+  it('meets requirements of User Story 17 : session or break lengths cannot be > 60', () => {
     render(<App />);
 
     const sessionIncrementButton = screen.getByTitle(
@@ -422,15 +422,15 @@ describe('App', () => {
 
     // Click the increment buttons 100 times
     for (let i = 0; i < 100; i += 1) {
-      await sessionIncrementButton.click();
-      await breakIncrementButton.click();
+      act(() => sessionIncrementButton.click());
+      act(() => breakIncrementButton.click());
     }
 
     expect(sessionLengthElement.innerHTML).toBe('60');
     expect(breakLengthElement.innerHTML).toBe('60');
   });
 
-  it('meets requirements of User Story 18 : first clicking the start button starts the timer from the given session length time', async () => {
+  it('meets requirements of User Story 18 : first clicking the start button starts the timer from the given session length time', () => {
     render(<App />);
 
     const startButton = screen.getByRole('button', {
@@ -463,7 +463,7 @@ describe('App', () => {
     );
 
     for (let i = 0; i < 7; i += 1) {
-      await sessionIncrementButton.click();
+      act(() => sessionIncrementButton.click());
     }
 
     act(() => {
@@ -482,7 +482,7 @@ describe('App', () => {
     );
 
     for (let i = 0; i < 7; i += 1) {
-      await sessionDecrementButton.click();
+      act(() => sessionDecrementButton.click());
     }
 
     act(() => {
@@ -603,7 +603,6 @@ describe('App', () => {
       act(() => {
         jest.advanceTimersByTime(1000);
       });
-      console.log(i);
       expect(timerDisplay.innerHTML).toBe('24:50');
     }
 
@@ -807,8 +806,6 @@ describe('App', () => {
 
     const alarmAudio = screen.getByTitle(/timer phase end beep audio/i);
 
-    console.log('AlarmAudio is: ', alarmAudio, alarmAudio.onEnded);
-
     expect(timerDisplay.innerHTML).toBe('25:00');
 
     // Start timer running, wait for 25 minutes
@@ -852,14 +849,13 @@ describe('App', () => {
     // Ideally we would test that the audio stops playing, however
     // jsdom does not support any loading or playback media operations, so we can't test this
     // const alarmAudio2 = app.querySelector('#beep');
-    // console.log(alarmAudio2);
 
     // expect(alarmAudio2).toHaveAttribute('data-playing', 'false');
 
     // expect(timerDisplay.innerHTML).toBe('4:53');
   });
 
-  // Example Test Involving Fake Timers
+  // // Example Test Involving Fake Timers
   // it('TEST OF FAKE TIMERS', () => {
   //   render(<App />);
 
