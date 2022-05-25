@@ -34,6 +34,8 @@ jobs:
 
       - name: Tests passed, build for deployment
         run: npm run build
+        env:
+          NEXT_PUBLIC_BASE_PATH: /fcc_frontendlibs_project5
 
       - name: Add nojekyll file to build
         run: touch ./out/.nojekyll
