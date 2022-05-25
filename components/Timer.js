@@ -8,6 +8,8 @@ import HistoryDisplay from './HistoryDisplay';
 import styles from './styles/Timer.module.css';
 import buttonStyles from './styles/TimerButtons.module.css';
 
+const basePrefix = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 function Timer() {
   const [breakLengthMins, setBreakLengthMins] = useState(5);
   const [sessionLengthMins, setSessionLengthMins] = useState(25);
@@ -395,13 +397,13 @@ function Timer() {
       <audio
         id="click"
         ref={buttonAudioRef}
-        src={'/audio/fingersnap.mp3'}
+        src={basePrefix + '/audio/fingersnap.mp3'}
         title={'Timer Start/Stop Click Audio'}
       ></audio>
       <audio
         id="beep"
         ref={alarmAudioRef}
-        src={'/audio/watch_alarm.mp3'}
+        src={basePrefix + '/audio/watch_alarm.mp3'}
         title={'Timer Phase End Beep Audio'}
         onEnded={(e) => {
           setAlarmAudioPlaying(false);

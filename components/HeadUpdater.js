@@ -1,5 +1,7 @@
 import Head from 'next/head';
 
+const basePrefix = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 function HeadUpdater({ timerSeconds, timerPhase, timerRunning }) {
   const getIconFileName = () => {
     if (timerPhase === 'Session') {
@@ -12,7 +14,7 @@ function HeadUpdater({ timerSeconds, timerPhase, timerRunning }) {
   return (
     <Head>
       <title>{`${timerSeconds} ${timerPhase}  - Pomo-do-it`}</title>
-      <link rel="icon" href={'/favicons' + getIconFileName()} />
+      <link rel="icon" href={basePrefix + '/favicons' + getIconFileName()} />
     </Head>
   );
 }
