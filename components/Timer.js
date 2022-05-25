@@ -224,7 +224,9 @@ function Timer() {
                   >
                     <i className="bi bi-arrow-down-circle-fill" />
                   </Button>
-                  <span id="session-length">{sessionLengthMins}</span>
+                  <span id="session-length" title="Current Session Length">
+                    {sessionLengthMins}
+                  </span>
                   <Button
                     id="session-increment"
                     title={'Increment Session Length'}
@@ -257,7 +259,9 @@ function Timer() {
                   >
                     <i className="bi bi-arrow-down-circle-fill" />
                   </Button>
-                  <span id="break-length">{breakLengthMins}</span>
+                  <span id="break-length" title="Current Break Length">
+                    {breakLengthMins}
+                  </span>
                   <Button
                     id="break-increment"
                     className={styles.phaseLengthButton}
@@ -290,7 +294,7 @@ function Timer() {
                     e.target.blur();
                   }}
                 />
-                <label for="auto-start-switch">
+                <label htmlFor="auto-start-switch">
                   Auto-Start next phase when current phase ends
                 </label>
               </div>
@@ -307,7 +311,11 @@ function Timer() {
                   timerPhase === 'Session' ? 'Time to focus!' : 'Time to relax!'
                 }`}
               </h5>
-              <h2 id="time-left" className={'display-1'}>
+              <h2
+                id="time-left"
+                title="Time Left in this Phase"
+                className={'display-1'}
+              >
                 {secondsFormatter(timerSecondsRemaining)}
               </h2>
 
