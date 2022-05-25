@@ -4,6 +4,7 @@ import '@testing-library/jest-dom';
 
 describe('App', () => {
   // JSDOM does not support loading or playback media
+  // See here https://github.com/jsdom/jsdom/issues/2155
   // Stubs for test setup:
   beforeAll(() => {
     window.HTMLMediaElement.prototype.load = () => {
