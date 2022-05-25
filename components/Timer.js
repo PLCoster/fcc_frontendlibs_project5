@@ -77,18 +77,15 @@ function Timer() {
   };
 
   const handleTimerStopStart = () => {
-    console.log('handleTimerStopStart Trigerred');
     const newTimerRunning = !timerRunning;
 
     // Start timer when switched on, store timeout cancel function
     if (newTimerRunning) {
-      console.log('Starting timer at: ', Date.now());
       handleTimerStart();
     }
 
     // When timer switched off, cancel current timeout:
     else {
-      console.log('Stopping timer at: ', Date.now());
       clearTimeout(currTimeoutID);
     }
 
@@ -98,7 +95,6 @@ function Timer() {
   // Handler function to decrement timer seconds every second using setTimeout
   // More accurate timekeeping than setInterval or repeated 1000ms setTimeouts
   const handleTimerStart = () => {
-    console.log('Setting up new timer!');
     // If no start time for the current timer, create one:
     if (!currPhaseStartRef.current) {
       currPhaseStartRef.current = Date.now();
@@ -252,7 +248,6 @@ function Timer() {
                     className={styles.phaseLengthButton}
                     title={'Decrement Break Length'}
                     onClick={(e) => {
-                      console.log('decrementing break ');
                       handleTimerLengthChange(-1, 'Break');
                     }}
                     onMouseLeave={(e) => {
@@ -269,7 +264,6 @@ function Timer() {
                     className={styles.phaseLengthButton}
                     title={'Increment Break Length'}
                     onClick={() => {
-                      console.log('incrementing break ');
                       handleTimerLengthChange(1, 'Break');
                     }}
                     onMouseLeave={(e) => {
@@ -356,7 +350,6 @@ function Timer() {
                       timerPhase === 'Session' ? 'Skip to Break' : 'Skip Break'
                     }
                     onClick={() => {
-                      console.log('Skipping current phase');
                       setSwapPhase(true);
                     }}
                     onMouseLeave={(e) => {
@@ -411,7 +404,6 @@ function Timer() {
         src={'/audio/watch_alarm.mp3'}
         title={'Timer Phase End Beep Audio'}
         onEnded={(e) => {
-          console.log(e, e.target.currentTime);
           setAlarmAudioPlaying(false);
         }}
         data-playing={alarmAudioPlaying}
