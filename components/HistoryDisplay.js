@@ -30,9 +30,10 @@ function HistoryDisplay({ timerPhase, history, handleClearHistoryClick }) {
 
   // Memoised creation of detailed Session History
   const phaseHistory = useMemo(() => {
-    return history.map(([phaseName, phaseSecs, phaseStart, phaseEnd]) => {
+    return history.map(([phaseName, phaseSecs, phaseStart, phaseEnd], i) => {
       return (
         <Row
+          key={i}
           className={`${styles.historyItem} ${
             phaseName === 'Session'
               ? buttonStyles.onSessionFont

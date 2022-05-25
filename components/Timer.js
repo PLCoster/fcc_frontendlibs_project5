@@ -24,6 +24,7 @@ function Timer() {
   // Refs for audio elements
   const buttonAudioRef = useRef();
   const alarmAudioRef = useRef();
+  const [alarmAudioPlaying, setAlarmAudioPlaying] = useState(false);
 
   // History-Related State
   const currTimeElapsedRef = useRef(0);
@@ -133,6 +134,7 @@ function Timer() {
       // Play Alarm Audio Clip if timer was running when phase ends
       if (timerRunning) {
         playAudio(alarmAudioRef);
+        setAlarmAudioPlaying(true);
       }
 
       // Cancel current timeout
@@ -401,11 +403,18 @@ function Timer() {
         id="click"
         ref={buttonAudioRef}
         src={'/audio/fingersnap.mp3'}
+        title={'Timer Start/Stop Click Audio'}
       ></audio>
       <audio
         id="beep"
         ref={alarmAudioRef}
         src={'/audio/watch_alarm.mp3'}
+        title={'Timer Phase End Beep Audio'}
+        onEnded={(e) => {
+          console.log(e, e.target.currentTime);
+          setAlarmAudioPlaying(false);
+        }}
+        data-playing={alarmAudioPlaying}
       ></audio>
     </Container>
   );
