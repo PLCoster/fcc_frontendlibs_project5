@@ -26,16 +26,17 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        
+
     - name: install dependencies
       run: npm ci
-    
-    - name: run tests 
+
+    - name: run tests
       run: npm test -- --watch-all=false
-    
+
     - name: Tests passed, build for deployment
       run: npm run build
-      
+      run: touch ./out/.nojekyll
+
     - name: Deploy 🚀
       uses: JamesIves/github-pages-deploy-action@v4.3.3
       with:
