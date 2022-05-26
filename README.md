@@ -16,6 +16,10 @@ This project was built using the following technologies:
 - **[Jest](https://jestjs.io/)** and **[React Testing Library](https://testing-library.com/docs/react-testing-library/intro/)** for testing
 - **[GitHub Actions](https://github.com/features/actions)** for automated CI/CD workflows
 
+Drum Samples were provided by **[SampleSwap](https://sampleswap.org/)**
+
+Styling was inspired by **[Pomofocus](https://pomofocus.io/)**
+
 ### Project Requirements:
 
 - User Story #1: I can see an element with id="break-label" that contains a string (e.g. "Break Length").
