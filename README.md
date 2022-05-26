@@ -88,6 +88,7 @@ Going beyond the required user stories above, Pomo-do-it allows users to:
 - view the current time left, timer phase and status summary in the browser tab, even when the app is not currently in focus in the browser
 - keep track of the total time spent productively and on breaks across all completed sessions in Session History
 - view a detailed break down of all completed sessions, their start and end timer as well as real and timer durations in the Detailed History display
+- adjust the volume level of the audio alert that plays when a session has ended (and also the volume of button clicks)
 
 In addition, a basic unit test suite in Jest / React Testing Library has been created, covering User Stories #1 - # 26. (Note that User Stories #27 and #28 cannot be covered via these unit tests, as the test library does not support HTMLAudioElements - testing these would likely be possible using Cypress). The created tests are run as part of a Github Actions CI/CD workflow. When changes to the project are pushed to the main branch, the project dependencies are installed and the test suite is run. If the test suite completes successfully, a production build of the project is created, and then deployed onto GitHub pages (on the gh-pages branch).
 
@@ -143,6 +144,5 @@ The test suite can be run using:
 
 ### Extension Ideas:
 
-- Adding volume control for application audio cues
 - Adding a to-do-list component to track items you wish to complete while using the timer
 - Including E2E / Integration tests using Cypress
