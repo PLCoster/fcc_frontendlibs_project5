@@ -27,6 +27,7 @@ function Timer() {
   const buttonAudioRef = useRef();
   const alarmAudioRef = useRef();
   const [alarmAudioPlaying, setAlarmAudioPlaying] = useState(false);
+  const [audioVolume, setAudioVolume] = useState(100);
 
   // History-Related State
   const currTimeElapsedRef = useRef(0);
@@ -187,6 +188,12 @@ function Timer() {
     audioRef.current.play();
   };
 
+  // Hook to adjust audio volume when volume control is changed:
+  useEffect(() => {
+    buttonAudioRef.current.volume = audioVolume / 100;
+    alarmAudioRef.current.volume = audioVolume / 100;
+  }, [audioVolume]);
+
   return (
     <Container
       className={`${styles.appContainer} ${
@@ -279,7 +286,7 @@ function Timer() {
             </Row>
 
             {/* AUTOSTART NEXT PHASE SWITCH */}
-            <div className="d-flex justify-content-center">
+            <div className="d-flex justify-content-center my-1">
               <div className="form-check form-switch">
                 <input
                   id="auto-start-switch"
@@ -296,6 +303,31 @@ function Timer() {
                   Auto-Start next phase when current phase ends
                 </label>
               </div>
+            </div>
+
+            {/* VOLUME SLIDER */}
+            <div className="d-flex justify-content-center align-items-center my-1">
+              <label className="px-3" htmlFor="volume-slider">
+                Audio Volume:
+              </label>
+              <i className="bi bi-volume-mute-fill lead"></i>
+              <input
+                id="volume-slider"
+                className={`${styles.volumeSlider}`}
+                title="Adjust Audio Volume Level"
+                type="range"
+                min="0"
+                max="100"
+                step="1"
+                value={audioVolume}
+                onChange={(e) => {
+                  setAudioVolume(e.target.value);
+                }}
+                onMouseLeave={(e) => {
+                  e.target.blur();
+                }}
+              />
+              <i className="bi bi-volume-up-fill lead"></i>
             </div>
 
             <hr />

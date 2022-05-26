@@ -53,6 +53,11 @@
   background-color: rgba(255, 255, 255, 0.3);
 }
 
+.autoSwitch:checked,
+.volumeSlider {
+  transition: background-color 0.5s ease;
+}
+
 .onSession .autoSwitch:checked {
   border-color: #fff;
   background-color: #d95550;
@@ -60,6 +65,51 @@
 
 .onBreak .autoSwitch:checked {
   border-color: #fff;
+  background-color: #457ca3;
+}
+
+.volumeSlider {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 200px;
+  margin: 8px 10px 6px 10px;
+  padding: 0 2px;
+  border: 1px #fff solid;
+  border-radius: 20px;
+}
+
+.volumeSlider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 10px;
+  width: 10px;
+  border-radius: 20px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.volumeSlider::-moz-range-thumb {
+  border: none;
+  height: 10px;
+  width: 10px;
+  border-radius: 20px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.volumeSlider::-ms-thumb {
+  border: none;
+  height: 10px;
+  width: 10px;
+  border-radius: 20px;
+  background: #ffffff;
+  cursor: pointer;
+}
+
+.onSession .volumeSlider {
+  background-color: #d95550;
+}
+
+.onBreak .volumeSlider {
   background-color: #457ca3;
 }
 
