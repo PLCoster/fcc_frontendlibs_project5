@@ -7,9 +7,9 @@ export default function Custom404() {
   const router = useRouter();
 
   // Redirect to the app
-  // useEffect(() => {
-  //   router.replace('/');
-  // });
+  useEffect(() => {
+    router.replace('/');
+  });
 
   // Note this behaviour could possibly be achieved with next.js redirects
   // https://nextjs.org/docs/api-reference/next.config.js/redirects
