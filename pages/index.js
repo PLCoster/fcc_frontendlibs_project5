@@ -4,7 +4,7 @@ import Timer from '../components/Timer';
 
 const basePrefix = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
-export default function Home() {
+export default function Home({ timerPhase, setTimerPhase }) {
   return (
     <>
       <Head>
@@ -29,7 +29,7 @@ export default function Home() {
         <link rel="manifest" href={basePrefix + '/site.webmanifest'} />
       </Head>
 
-      <Timer />
+      <Timer timerPhase={timerPhase} setTimerPhase={setTimerPhase} />
     </>
   );
 }

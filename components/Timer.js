@@ -10,7 +10,7 @@ import buttonStyles from './styles/TimerButtons.module.css';
 
 const basePrefix = process.env.NEXT_PUBLIC_BASE_PATH || '';
 
-function Timer() {
+function Timer({ timerPhase, setTimerPhase }) {
   const [breakLengthMins, setBreakLengthMins] = useState(5);
   const [sessionLengthMins, setSessionLengthMins] = useState(25);
 
@@ -19,7 +19,6 @@ function Timer() {
   const timerSecondsRemainingRef = useRef(1500); // Ref required to access state inside timeout
   const [currTimeoutID, setCurrTimeoutID] = useState(null);
 
-  const [timerPhase, setTimerPhase] = useState('Session');
   const [swapPhase, setSwapPhase] = useState(false);
   const [autoStartNewPhase, setAutoStartNewPhase] = useState(true);
 

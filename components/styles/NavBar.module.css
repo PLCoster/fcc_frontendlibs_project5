@@ -1,3 +1,15 @@
+.navbar {
+  transition: background-color 0.5s ease;
+}
+
 .navbarBrand {
   margin-left: 40px;
+}
+
+.onSession {
+  background-color: #d95550;
+}
+
+.onBreak {
+  background-color: #457ca3;
 }

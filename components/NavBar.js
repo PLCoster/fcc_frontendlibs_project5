@@ -2,9 +2,15 @@ import { Navbar, Nav, NavDropdown, Container } from 'react-bootstrap';
 
 import styles from './styles/NavBar.module.css';
 
-function NavBar() {
+function NavBar({ timerPhase }) {
   return (
-    <Navbar bg="dark" variant="dark" expand="md">
+    <Navbar
+      variant="dark"
+      expand="md"
+      className={`${styles.navbar} ${
+        timerPhase === 'Session' ? styles.onSession : styles.onBreak
+      }`}
+    >
       <Container fluid>
         <Navbar.Brand href="#home" className={styles.navbarBrand}>
           25 + 5 Clock
