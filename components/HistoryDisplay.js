@@ -30,7 +30,9 @@ function HistoryDisplay({ timerPhase, history, handleClearHistoryClick }) {
 
   // Memoised creation of detailed Session History
   const phaseHistory = useMemo(() => {
-    return history.map(([phaseName, phaseSecs, phaseStart, phaseEnd], i) => {
+    // Order history items from newest to oldest
+    const newHistory = history.slice().reverse();
+    return newHistory.map(([phaseName, phaseSecs, phaseStart, phaseEnd], i) => {
       return (
         <Row
           key={i}
@@ -141,7 +143,7 @@ function HistoryDisplay({ timerPhase, history, handleClearHistoryClick }) {
         <div
           className={`${styles.detailedHistoryContainer} d-flex flex-column align-items-center mt-3 mb-3`}
         >
-          {phaseHistory.length ? phaseHistory.reverse() : 'No History Yet!'}
+          {phaseHistory.length ? phaseHistory : 'No History Yet!'}
         </div>
       ) : null}
     </>
