@@ -98,7 +98,7 @@ In addition, a basic unit test suite in Jest / React Testing Library has been cr
 
 - `/pages` - in the Next.js framework, pages are associated with routes in the app based on the file name. In this app there is only a single route (`/`), and the React components that build the page are in `index.js`.
 
-  - the `_app.js` page file is a special component that wraps every other page. In this project this just renders the `NavBar` component on every page, and adds in the FCC testing script.
+  - the `_app.js` page file is a special component that wraps every other page. In this project this just renders the `NavBar` component on every page, and adds in the FCC testing script. It also holds as a state variable the current timer phase, which is lifted to this component so that the NavBar can also be styled based on the timer phase.
   - `index.js` is the only page in this application, it renders the `Timer` component.
   - `404.js` is a custom error page that is set to redirect users immediately to the app if reached.
 
