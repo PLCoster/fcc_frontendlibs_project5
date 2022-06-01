@@ -1,8 +1,18 @@
+import { useState } from 'react';
 import { render, screen, act, fireEvent } from '@testing-library/react';
-import App from '../pages/index';
 import '@testing-library/jest-dom';
 
+import App from '../pages/index';
+
+// Wrap the main App component with a small component to stand-in for _app:
+const TestApp = () => {
+  const [timerPhase, setTimerPhase] = useState('Session');
+  return <App timerPhase={timerPhase} setTimerPhase={setTimerPhase} />;
+};
+
 describe('App', () => {
+  let app;
+
   // JSDOM does not support loading or playback media
   // See here https://github.com/jsdom/jsdom/issues/2155
   // Stubs for test setup:
@@ -21,9 +31,11 @@ describe('App', () => {
     };
   });
 
-  // Use Fake Timers
+  // Use Fake Timers, render entire App before each test
   beforeEach(() => {
     jest.useFakeTimers();
+    const renderObj = render(<TestApp />);
+    app = renderObj.container; // Pull out app DOM element
   });
 
   afterEach(() => {
@@ -34,8 +46,6 @@ describe('App', () => {
   });
 
   it('renders the Apps heading', () => {
-    render(<App />);
-
     const heading = screen.getByRole('heading', {
       name: /pomo-do-it/i,
     });
@@ -44,8 +54,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 1: renders a break-length label', () => {
-    render(<App />);
-
     const breakLengthLabel = screen.getByRole('heading', {
       name: /break length:/i,
     });
@@ -54,8 +62,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 2: renders a session-length label', () => {
-    render(<App />);
-
     const breakLengthLabel = screen.getByRole('heading', {
       name: /session length:/i,
     });
@@ -64,8 +70,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 3: renders controls to decrement session and break lengths', () => {
-    render(<App />);
-
     const sessionDecrementButton = screen.getByTitle(
       /decrement session length/i
     );
@@ -77,8 +81,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 4: renders controls to increment session and break lengths', () => {
-    render(<App />);
-
     const sessionIncrementButton = screen.getByTitle(
       /increment session length/i
     );
@@ -90,8 +92,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 5: renders an element displaying the break length with initial value of 5', () => {
-    render(<App />);
-
     const breakLengthElement = screen.getByTitle(/current break length/i, {
       exact: true,
     });
@@ -100,8 +100,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 6: renders an element displaying the session length with initial value of 25', () => {
-    render(<App />);
-
     const sessionLengthElement = screen.getByTitle(/current session length/i, {
       exact: true,
     });
@@ -110,8 +108,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 7: renders an element that displays the current timer phase, starting with "Session"', () => {
-    render(<App />);
-
     const initialPhaseLabel = screen.getByRole('heading', {
       name: /session : paused/i,
     });
@@ -120,8 +116,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 8: renders an element that displays the remaining time in the current phase, initialised to 25:00', () => {
-    render(<App />);
-
     const timerDisplay = screen.getByTitle(/time left in this phase/i, {
       exact: true,
     });
@@ -130,8 +124,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 9: renders a button to start/stop the timer', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -140,8 +132,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 10: renders a button to reset the timer', () => {
-    render(<App />);
-
     const resetButton = screen.getByRole('button', {
       name: /reset/i,
     });
@@ -150,8 +140,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 11-1 : clicking the reset button resets the timer to initial conditions', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -207,8 +195,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 11-2 : clicking the reset button resets the timer to initial conditions 2', () => {
-    render(<App />);
-
     const skipButton = screen.getByRole('button', {
       name: /skip to break/i,
     });
@@ -270,8 +256,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 12 : clicking the decrement break length button decrements the value by 1', () => {
-    render(<App />);
-
     const breakDecrementButton = screen.getByTitle(/decrement break length/i);
 
     const breakLengthElement = screen.getByTitle(/current break length/i, {
@@ -294,8 +278,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 13 : clicking the increment break length button increments the value by 1', () => {
-    render(<App />);
-
     const breakIncrementButton = screen.getByTitle(/increment break length/i);
 
     const breakLengthElement = screen.getByTitle(/current break length/i, {
@@ -318,8 +300,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 14 : clicking the decrement session length button decrements the value by 1', () => {
-    render(<App />);
-
     const sessionDecrementButton = screen.getByTitle(
       /decrement session length/i
     );
@@ -344,8 +324,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 15 : clicking the increment session length button increments the value by 1', () => {
-    render(<App />);
-
     const sessionIncrementButton = screen.getByTitle(
       /increment session length/i
     );
@@ -370,8 +348,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 16 : session or break lengths cannot be <= 0', () => {
-    render(<App />);
-
     const sessionDecrementButton = screen.getByTitle(
       /decrement session length/i
     );
@@ -401,8 +377,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 17 : session or break lengths cannot be > 60', () => {
-    render(<App />);
-
     const sessionIncrementButton = screen.getByTitle(
       /increment session length/i
     );
@@ -432,8 +406,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 18 : first clicking the start button starts the timer from the given session length time', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -495,8 +467,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 19 : the value on the timer is displayed in mm:ss format and decrements by a value of 1s every 1000ms', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -525,8 +495,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 20 : if the timer is running and the pause button is clicked, the countdown should pause', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -568,8 +536,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Story 21 : if the timer is running, then paused, then started again, the countdown should resume from where it was paused', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -624,8 +590,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Stories 22 and 23 : when a session countdown reaches 0, timer switches to a break phase, and the timer label updates to show this', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -672,8 +636,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Stories 22 and 23 : when a session countdown reaches 0, timer switches to a break phase (with initial time set by the given Break Length time), and the timer label updates to show a break has started', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -729,8 +691,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Stories 24 and 25 : when a break countdown reaches 0, timer switches to a session phase (with initial time set by the given Session Length time), and the timer label updates to show a session has started', () => {
-    render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -795,8 +755,6 @@ describe('App', () => {
   });
 
   it('meets requirements of User Stories 26, 27 and 28 : when a phase countdown reaches 00:00, an audio element plays an audio clip lasting at least 1 second', () => {
-    const { container: app } = render(<App />);
-
     const startButton = screen.getByRole('button', {
       name: /start/i,
     });
@@ -858,7 +816,7 @@ describe('App', () => {
 
   // // Example Test Involving Fake Timers
   // it('TEST OF FAKE TIMERS', () => {
-  //   render(<App />);
+  //   render(<TestApp />);
 
   //   const startButton = screen.getByRole('button', {
   //     name: /start/i,
