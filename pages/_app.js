@@ -21,7 +21,7 @@ function MyApp({ Component, pageProps }) {
       {/* FCC TEST SCRIPT */}
       <script
         src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"
-        async
+        defer
       />
     </>
   );
